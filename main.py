@@ -2,8 +2,70 @@ import sys
 import pygame
 from pygame.locals import *
 
+
+def buildBoardFromString(fen):
+    board = [[],[],[],[],[],[],[],[]]
+    row = 7
+    for char in fen:
+        if char != '/':
+            if '0' < char < '9':
+                for i in range(ord(char)-48):
+                    board[row].append('')
+            else:
+                board[row].append(char)
+        else:
+            row-= 1
+    return board
+
+def charToImg(char):
+    #KQRBNPkqrbnp
+
+    if char == 'R':
+        return 2
+    elif char == 'N':
+        return 4
+    elif char == 'B':
+        return 3
+    elif char == 'K':
+        return 0
+    elif char == 'Q':
+        return 1
+    elif char == 'P':
+        return 5
+    elif char == 'r':
+        return 8
+    elif char == 'n':
+        return 10
+    elif char == 'b':
+        return 9
+    elif char == 'k':
+        return 6
+    elif char == 'q':
+        return 7
+    elif char == 'p':
+        return 11
+    else:
+        return 0
+
+
+
 pygame.init()
-blackQueen = pygame.image.load('ChessKingSacrafice/blackQueen.png')
+boardState = "RNBKQBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbkqbnr"
+images = []
+images.append(pygame.image.load("ChessKingSacrafice/whiteKing.png"))
+images.append(pygame.image.load("ChessKingSacrafice/whiteQueen.png"))
+images.append(pygame.image.load("ChessKingSacrafice/whiteRook.png"))
+images.append(pygame.image.load("ChessKingSacrafice/whiteBishob.png"))
+images.append(pygame.image.load("ChessKingSacrafice/whiteKnight.png"))
+images.append(pygame.image.load("ChessKingSacrafice/whitePawn.png"))
+images.append(pygame.image.load("ChessKingSacrafice/blackKing.png"))
+images.append(pygame.image.load("ChessKingSacrafice/blackQueen.png"))
+images.append(pygame.image.load("ChessKingSacrafice/blackRook.png"))
+images.append(pygame.image.load("ChessKingSacrafice/blackBishob.png"))
+images.append(pygame.image.load("ChessKingSacrafice/blackKnight.png"))
+images.append(pygame.image.load("ChessKingSacrafice/blackPawn.png"))
+
+
 window = pygame.display.set_mode((1280,1280*9/16))
 window.fill('#966F33')
 boxSize = 90
@@ -15,6 +77,7 @@ for row in range(0, 8):
 pygame.draw.rect(window,'BLACK',(0,0,720,720),2)
 FPS = pygame.time.Clock()
 FPS.tick(60)
+
 
 # class Player(pygame.sprite.Sprite):
 #     def __init__(self):
@@ -39,9 +102,12 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+    boardArr = buildBoardFromString(boardState)
+    for row in range(len(boardArr)):
+        for col in range(len(boardArr[row])):
+            if boardArr[row][col] != '':
+                window.blit(images[charToImg(boardArr[row][col])], (col * boxSize, row * boxSize))
 
-
-    window.blit(blackQueen,(0,0))
     pygame.display.update()
     FPS.tick(60)
 

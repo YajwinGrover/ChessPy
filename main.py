@@ -1,6 +1,7 @@
 import sys
 import pygame
 from pygame.locals import *
+from Pawn import Pawn
 
 
 def buildBoardFromString(fen):
@@ -50,7 +51,12 @@ def charToImg(char):
 
 
 pygame.init()
+pygame.font.init()
+my_font = pygame.font.SysFont('Comic Sans MS', 30)
+selected = False
+
 boardState = "RNBKQBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbkqbnr"
+# boardState = "8/1q2P1B1/4P1K1/7N/p2pp3/1bn1p1pk/n7/1B6"
 images = []
 images.append(pygame.image.load("ChessKingSacrafice/whiteKing.png"))
 images.append(pygame.image.load("ChessKingSacrafice/whiteQueen.png"))
@@ -67,47 +73,57 @@ images.append(pygame.image.load("ChessKingSacrafice/blackPawn.png"))
 
 
 window = pygame.display.set_mode((1280,1280*9/16))
-window.fill('#966F33')
-boxSize = 90
-for row in range(0, 8):
-    for col in range(0, 8):
-        if ((row + col) % 2 == 0):
-            pygame.draw.rect(window, '#382e12', (boxSize*row, boxSize*col, boxSize, boxSize))
 
-pygame.draw.rect(window,'BLACK',(0,0,720,720),2)
+boxSize = 90
+
+
+
 FPS = pygame.time.Clock()
 FPS.tick(60)
 
 
-# class Player(pygame.sprite.Sprite):
-#     def __init__(self):
-#         super().__init__()
-#         self.image = pygame.image.load("AvatarMaker copy.png")
-#         self.rect = self.image.get_rect()
-#         self.rect.center = (160,520)
-#
-#     def update(self):
-#         pressedKeys = pygame.key.get_pressed()
-#         if pressedKeys[K_w]:
-#             self.rect.move_ip(0,-5)
-#         if pressedKeys[K_s]:
-#             self.rect.move_ip(0,5)
-#     def draw(self,surface):
-#         surface.blit(self.image,self.rect)
-#
-# P1 = Player()
+
+
+
+pieces = []
+for i in range(8):
+    if i % 2 == 0:
+        pieces.append(Pawn(i * boxSize, i * boxSize, 'white'))
+    else:
+        pieces.append(Pawn(i * boxSize, i * boxSize,'black'))
+
+
+
 while True:
+    for row in range(0, 8):
+        for col in range(0, 8):
+            if ((row + col) % 2 == 0):
+                pygame.draw.rect(window, '#382e12', (boxSize * row, boxSize * col, boxSize, boxSize))
+    pygame.draw.rect(window, 'BLACK', (0, 0, 720, 720), 2)
 
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-    boardArr = buildBoardFromString(boardState)
-    for row in range(len(boardArr)):
-        for col in range(len(boardArr[row])):
-            if boardArr[row][col] != '':
-                window.blit(images[charToImg(boardArr[row][col])], (col * boxSize, row * boxSize))
+        if event.type == KEYDOWN:
+            if event.key == K_d:
+                for piece in pieces:
+                    piece.setFollow(False)
+                    piece.snap(boxSize)
+
+    pos = pygame.mouse.get_pos()
+    for i in pieces:
+        i.draw(window)
+        i.update(pos[0], pos[1])
+
+    if pygame.mouse.get_pressed()[0]:
+        pos = pygame.mouse.get_pos()
+
+        for piece in pieces:
+            if piece.rect.collidepoint(pos):
+                piece.setFollow(True)
 
     pygame.display.update()
+    window.fill('#966F33')
     FPS.tick(60)
 

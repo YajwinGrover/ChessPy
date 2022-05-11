@@ -5,15 +5,20 @@ from pygame.locals import *
 class Pawn(pygame.sprite.Sprite):
     x = 0
     y = 0
+    oldX = 0
+    oldY = 0
     color = ""
     shouldFollow = False
+    firstMove = True
 
     def __init__(self,newX,newY,ncolor):
         super().__init__()
         self.x = newX
         self.y = newY
-        color = ncolor
-        if(color == 'white'):
+        self.oldY = newY
+        self.oldX = newX
+        self.color = ncolor
+        if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whitePawn.png")
         else:
             self.image = pygame.image.load("ChessKingSacrafice/blackPawn.png")
@@ -22,7 +27,7 @@ class Pawn(pygame.sprite.Sprite):
 
     def update(self, newX, newY):
         if self.shouldFollow:
-            self.rect.center = (newX,newY)
+            self.rect.center = (newX, newY)
             self.x = newX
             self.y = newY
 
@@ -30,10 +35,61 @@ class Pawn(pygame.sprite.Sprite):
         newX = boxSize * (self.x//boxSize)
         newY = boxSize * (self.y//boxSize)
         self.rect.topleft = (newX, newY)
+        self.x = newX
+        self.y = newY
+
+    def checkMove(self, boxSize):
+        if self.firstMove:
+            if self.color == 'black':
+                distMove = self.y - self.oldY
+                if (distMove == boxSize * 2 or distMove == boxSize) and self.x == self.oldX:
+                    self.firstMove = False
+                    self.oldX = self.x
+                    self.oldY = self.y
+
+                else:
+                    self.rect.topleft = (self.oldX, self.oldY)
+                    self.x = self.oldX
+                    self.y = self.oldY
+
+            elif self.color == 'white':
+                distMove = self.oldY - self.y
+                if (distMove == boxSize * 2 or distMove == boxSize )and self.x == self.oldX:
+                    self.firstMove = False
+                    self.oldX = self.x
+                    self.oldY = self.y
+                else:
+                    self.rect.topleft = (self.oldX, self.oldY)
+                    self.x = self.oldX
+                    self.y = self.oldY
+        else:
+
+            if self.color == 'black':
+                distMove = self.y - self.oldY
+                if distMove == boxSize and self.x == self.oldX:
+                    self.firstMove == False
+                    self.oldX = self.x
+                    self.oldY = self.y
+
+                else:
+                    self.rect.topleft = (self.oldX, self.oldY)
+                    self.x = self.oldX
+                    self.y = self.oldY
+            elif self.color == 'white':
+                distMove = self.oldY - self.y
+                if distMove == boxSize and self.x == self.oldX:
+                    self.firstMove == False
+                    self.oldX = self.x
+                    self.oldY = self.y
+                else:
+                    self.rect.topleft = (self.oldX, self.oldY)
+                    self.x = self.oldX
+                    self.y = self.oldY
+
 
     def setFollow(self,follow):
         self.shouldFollow = follow
 
-    def draw(self,surface):
-        surface.blit(self.image,self.rect)
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
 

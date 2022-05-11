@@ -2,6 +2,7 @@ import sys
 import pygame
 from pygame.locals import *
 from Pawn import Pawn
+from Queen import Queen
 
 
 def buildBoardFromString(fen):
@@ -92,7 +93,8 @@ for i in range(8):
     else:
         pieces.append(Pawn(i * boxSize, i * boxSize,'black'))
 
-
+pieces.append(Queen(7 * boxSize,0 * boxSize,'white'))
+pieces.append(Queen(6 * boxSize,0 * boxSize,'black'))
 
 while True:
     for row in range(0, 8):
@@ -108,8 +110,13 @@ while True:
         if event.type == KEYDOWN:
             if event.key == K_d:
                 for piece in pieces:
-                    piece.setFollow(False)
-                    piece.snap(boxSize)
+                    if(piece.shouldFollow):
+                        piece.setFollow(False)
+                        piece.snap(boxSize)
+                        piece.checkMove(boxSize)
+                    else:
+                        piece.setFollow(False)
+                        piece.snap(boxSize)
 
     pos = pygame.mouse.get_pos()
     for i in pieces:

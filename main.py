@@ -9,13 +9,12 @@ from Knight import Knight
 from Bishob import Bishob
 from Board import Board
 
-
 # Yes I am sane.
 def DESTROYPIECES(term, pieces):
     if not term:
         return
     x = term[1]
-    y = term[2]
+    y = term[0]
 
     for p in pieces:
         if p.x == x and p.y == y and p.id == term[0]:

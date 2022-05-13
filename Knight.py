@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from Board import Board
 
 class Knight(pygame.sprite.Sprite):
     x = 0
@@ -8,26 +9,23 @@ class Knight(pygame.sprite.Sprite):
     oldY = 0
     shouldFollow = False
     color = ''
-    id = ''
+    board = None
+    id = 4
 
-    def __init__(self,newX, newY,ncolor, board):
-
+    def __init__(self, newX, newY, ncolor, board):
         super().__init__()
         self.x = newX
         self.y = newY
         self.color = ncolor
         self.oldX = newX
         self.oldY = newY
-
         self.board = board
-
 
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteKnight.png")
-            self.id = 'N'
         else:
             self.image = pygame.image.load("ChessKingSacrafice/blackKnight.png")
-            self.id = 'n'
+            id = 10
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -52,7 +50,10 @@ class Knight(pygame.sprite.Sprite):
             self.board.remove_piece(self.oldX, self.oldY)
             self.oldX = self.x
             self.oldY = self.y
-            self.board.set_piece(self.x, self.y, self.id)
+            if self.color == 'black':
+                self.board.set_piece(self.x, self.y, 'n')
+            else:
+                self.board.set_piece(self.x, self.y, 'N')
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX
@@ -63,4 +64,3 @@ class Knight(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
-

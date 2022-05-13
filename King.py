@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from Board import Board
 
 class King(pygame.sprite.Sprite):
     x = 0
@@ -8,26 +9,23 @@ class King(pygame.sprite.Sprite):
     oldY = 0
     shouldFollow = False
     color = ''
-    id = ''
+    board = None
+    id = 0
 
-    def __init__(self,newX, newY,ncolor, board):
-
+    def __init__(self, newX, newY, ncolor, board):
         super().__init__()
         self.x = newX
         self.y = newY
         self.color = ncolor
         self.oldX = newX
         self.oldY = newY
-
         self.board = board
-
 
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteKing.png")
-            self.id = 'K'
         else:
             self.image = pygame.image.load("ChessKingSacrafice/blackKing.png")
-            self.id = 'k'
+            id = 6
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -48,18 +46,16 @@ class King(pygame.sprite.Sprite):
     def checkMove(self, boxSize):
         distX = abs(self.x - self.oldX)
         distY = abs(self.y - self.oldY)
+        print(self.x/90, self.y/90)
 
-        if distY <= 90 and distX <= 90:
+        if distY <= 90 and distX <= 90 and (self.board.get_piece(int(self.x / 90), int(self.y / 90)).isupper or self.board.get_piece(int(self.x / 90), int(self.y / 90)) == '-'):
             self.board.remove_piece(self.oldX, self.oldY)
             self.oldX = self.x
             self.oldY = self.y
-            self.board.set_piece(self.x, self.y, self.id)
-        # if distY <= 90 and distX <= 90 and (self.board.get_piece(self.x, self.y).isupper or self.board.get_piece(self.x, self.y) == '-'):
-        #         self.board.remove_piece(self.oldX, self.oldY)
-        #         self.oldX = self.x
-        #         self.oldY = self.y
-        #         self.board.set_piece(self.x, self.y, 'K')
-
+            if self.color == 'black':
+                self.board.set_piece(self.x, self.y, 'k')
+            else:
+                self.board.set_piece(self.x, self.y, 'K')
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX

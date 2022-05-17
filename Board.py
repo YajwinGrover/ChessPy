@@ -62,4 +62,3 @@ class Board:
             self.terminatedPiece.append(nx * self.boxSize)
             self.terminatedPiece.append(ny * self.boxSize)
         self.board[ny][nx] = value
-

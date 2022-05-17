@@ -104,4 +104,3 @@ while True:
     pygame.display.update()
     window.fill('#966F33')
     FPS.tick(60)
-

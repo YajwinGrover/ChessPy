@@ -3,7 +3,11 @@ import pygame
 from pygame.locals import *
 from Pawn import Pawn
 from Queen import Queen
-
+from King import King
+from Rook import Rook
+from Knight import Knight
+from Bishob import Bishob
+from Board import Board
 
 def buildBoardFromString(fen):
     board = [[],[],[],[],[],[],[],[]]
@@ -57,6 +61,8 @@ my_font = pygame.font.SysFont('Comic Sans MS', 30)
 selected = False
 
 boardState = "RNBKQBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbkqbnr"
+board = Board(boardState)
+
 # boardState = "8/1q2P1B1/4P1K1/7N/p2pp3/1bn1p1pk/n7/1B6"
 images = []
 images.append(pygame.image.load("ChessKingSacrafice/whiteKing.png"))
@@ -88,18 +94,34 @@ FPS.tick(60)
 
 pieces = []
 for i in range(8):
-    if i % 2 == 0:
-        pieces.append(Pawn(i * boxSize, i * boxSize, 'white'))
-    else:
-        pieces.append(Pawn(i * boxSize, i * boxSize,'black'))
+        pieces.append(Pawn(i * boxSize, 6 * boxSize, 'white', board))
 
-pieces.append(Queen(7 * boxSize,0 * boxSize,'white'))
-pieces.append(Queen(6 * boxSize,0 * boxSize,'black'))
+for i in range(8):
+    pieces.append(Pawn(i * boxSize, 1 * boxSize,'black', board))
+
+
+pieces.append(Rook(0 * boxSize,7 * boxSize,'white', board))
+pieces.append(Knight(1 * boxSize,7 * boxSize,'white', board))
+pieces.append(Bishob(2 * boxSize,7 * boxSize,'white', board))
+pieces.append(Queen(3 * boxSize,7 * boxSize,'white', board))
+pieces.append(King(4 * boxSize,7 * boxSize,'white', board))
+pieces.append(Bishob(5 * boxSize,7 * boxSize,'white', board))
+pieces.append(Knight(6 * boxSize,7 * boxSize,'white', board))
+pieces.append(Rook(7 * boxSize,7 * boxSize,'white', board))
+
+pieces.append(Rook(0 * boxSize,0 * boxSize,'black', board))
+pieces.append(Knight(1 * boxSize,0 * boxSize,'black', board))
+pieces.append(Bishob(2 * boxSize,0 * boxSize,'black', board))
+pieces.append(Queen(3 * boxSize,0 * boxSize,'black', board))
+pieces.append(King(4 * boxSize,0 * boxSize,'black', board))
+pieces.append(Bishob(5 * boxSize,0 * boxSize,'black', board))
+pieces.append(Knight(6 * boxSize,0 * boxSize,'black', board))
+pieces.append(Rook(7 * boxSize,0 * boxSize,'black', board))
 
 while True:
     for row in range(0, 8):
         for col in range(0, 8):
-            if ((row + col) % 2 == 0):
+            if ((row + col) % 2 == 1):
                 pygame.draw.rect(window, '#382e12', (boxSize * row, boxSize * col, boxSize, boxSize))
     pygame.draw.rect(window, 'BLACK', (0, 0, 720, 720), 2)
 
@@ -110,7 +132,7 @@ while True:
         if event.type == KEYDOWN:
             if event.key == K_d:
                 for piece in pieces:
-                    if(piece.shouldFollow):
+                    if piece.shouldFollow:
                         piece.setFollow(False)
                         piece.snap(boxSize)
                         piece.checkMove(boxSize)

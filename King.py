@@ -9,13 +9,14 @@ class King(pygame.sprite.Sprite):
     shouldFollow = False
     color = ''
 
-    def __init__(self,newX, newY,ncolor):
+    def __init__(self,newX, newY,ncolor, board):
         super().__init__()
         self.x = newX
         self.y = newY
         self.color = ncolor
         self.oldX = newX
         self.oldY = newY
+        self.board = board
 
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteKing.png")
@@ -41,9 +42,13 @@ class King(pygame.sprite.Sprite):
     def checkMove(self, boxSize):
         distX = abs(self.x - self.oldX)
         distY = abs(self.y - self.oldY)
-        if distY <= 90 and distX <= 90:
-            self.oldX = self.x
-            self.oldY = self.y
+        print(self.x/90, self.y/90)
+
+        if distY <= 90 and distX <= 90 and (self.board.get_piece(int(self.x / 90), int(self.y / 90)).isupper or self.board.get_piece(int(self.x / 90), int(self.y / 90)) == '-'):
+                self.board.remove_piece(int(self.oldX/90), int(self.oldY/90))
+                self.oldX = self.x
+                self.oldY = self.y
+                self.board.set_piece(int(self.x/90), int(self.y/90), 'K')
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX

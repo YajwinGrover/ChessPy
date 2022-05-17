@@ -9,13 +9,14 @@ class Bishob(pygame.sprite.Sprite):
     shouldFollow = False
     color = ''
 
-    def __init__(self,newX, newY,ncolor):
+    def __init__(self,newX, newY,ncolor, board):
         super().__init__()
         self.x = newX
         self.y = newY
         self.color = ncolor
         self.oldX = newX
         self.oldY = newY
+        self.board = board
 
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteBishob.png")

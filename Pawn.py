@@ -11,13 +11,15 @@ class Pawn(pygame.sprite.Sprite):
     shouldFollow = False
     firstMove = True
 
-    def __init__(self,newX,newY,ncolor):
+    def __init__(self,newX,newY,ncolor, board):
         super().__init__()
         self.x = newX
         self.y = newY
         self.oldY = newY
         self.oldX = newX
         self.color = ncolor
+        self.board = board
+
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whitePawn.png")
         else:
@@ -56,8 +58,10 @@ class Pawn(pygame.sprite.Sprite):
                 distMove = self.oldY - self.y
                 if (distMove == boxSize * 2 or distMove == boxSize )and self.x == self.oldX:
                     self.firstMove = False
+                    self.board.remove_piece(int(self.oldX/90), int(self.oldY/90))
                     self.oldX = self.x
                     self.oldY = self.y
+                    self.board.set_piece()
                 else:
                     self.rect.topleft = (self.oldX, self.oldY)
                     self.x = self.oldX

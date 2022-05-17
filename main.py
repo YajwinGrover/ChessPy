@@ -9,88 +9,35 @@ from Knight import Knight
 from Bishob import Bishob
 from Board import Board
 
-def buildBoardFromString(fen):
-    board = [[],[],[],[],[],[],[],[]]
-    row = 7
-    for char in fen:
-        if char != '/':
-            if '0' < char < '9':
-                for i in range(ord(char)-48):
-                    board[row].append('')
-            else:
-                board[row].append(char)
-        else:
-            row-= 1
-    return board
+# Yes I am sane.
+def DESTROYPIECES(term, pieces):
+    if not term:
+        return
+    x = term[1]
+    y = term[2]
 
-def charToImg(char):
-    #KQRBNPkqrbnp
-
-    if char == 'R':
-        return 2
-    elif char == 'N':
-        return 4
-    elif char == 'B':
-        return 3
-    elif char == 'K':
-        return 0
-    elif char == 'Q':
-        return 1
-    elif char == 'P':
-        return 5
-    elif char == 'r':
-        return 8
-    elif char == 'n':
-        return 10
-    elif char == 'b':
-        return 9
-    elif char == 'k':
-        return 6
-    elif char == 'q':
-        return 7
-    elif char == 'p':
-        return 11
-    else:
-        return 0
-
+    for p in pieces:
+        if p.x == x and p.y == y and p.id == term[0]:
+            pieces.remove(p)
 
 
 pygame.init()
 pygame.font.init()
 my_font = pygame.font.SysFont('Comic Sans MS', 30)
 selected = False
+boxSize = 90
 
 boardState = "RNBKQBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbkqbnr"
-board = Board(boardState)
+board = Board(boardState, boxSize)
 
 # boardState = "8/1q2P1B1/4P1K1/7N/p2pp3/1bn1p1pk/n7/1B6"
-images = []
-images.append(pygame.image.load("ChessKingSacrafice/whiteKing.png"))
-images.append(pygame.image.load("ChessKingSacrafice/whiteQueen.png"))
-images.append(pygame.image.load("ChessKingSacrafice/whiteRook.png"))
-images.append(pygame.image.load("ChessKingSacrafice/whiteBishob.png"))
-images.append(pygame.image.load("ChessKingSacrafice/whiteKnight.png"))
-images.append(pygame.image.load("ChessKingSacrafice/whitePawn.png"))
-images.append(pygame.image.load("ChessKingSacrafice/blackKing.png"))
-images.append(pygame.image.load("ChessKingSacrafice/blackQueen.png"))
-images.append(pygame.image.load("ChessKingSacrafice/blackRook.png"))
-images.append(pygame.image.load("ChessKingSacrafice/blackBishob.png"))
-images.append(pygame.image.load("ChessKingSacrafice/blackKnight.png"))
-images.append(pygame.image.load("ChessKingSacrafice/blackPawn.png"))
-
 
 window = pygame.display.set_mode((1280,1280*9/16))
-
-boxSize = 90
 
 
 
 FPS = pygame.time.Clock()
 FPS.tick(60)
-
-
-
-
 
 pieces = []
 for i in range(8):
@@ -121,8 +68,9 @@ pieces.append(Rook(7 * boxSize,0 * boxSize,'black', board))
 while True:
     for row in range(0, 8):
         for col in range(0, 8):
-            if ((row + col) % 2 == 1):
+            if (row + col) % 2 == 1:
                 pygame.draw.rect(window, '#382e12', (boxSize * row, boxSize * col, boxSize, boxSize))
+
     pygame.draw.rect(window, 'BLACK', (0, 0, 720, 720), 2)
 
     for event in pygame.event.get():
@@ -139,6 +87,7 @@ while True:
                     else:
                         piece.setFollow(False)
                         piece.snap(boxSize)
+                DESTROYPIECES(board.get_ded(),pieces)
 
     pos = pygame.mouse.get_pos()
     for i in pieces:

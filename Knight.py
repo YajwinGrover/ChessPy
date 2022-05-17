@@ -8,20 +8,26 @@ class Knight(pygame.sprite.Sprite):
     oldY = 0
     shouldFollow = False
     color = ''
+    id = ''
 
     def __init__(self,newX, newY,ncolor, board):
+
         super().__init__()
         self.x = newX
         self.y = newY
         self.color = ncolor
         self.oldX = newX
         self.oldY = newY
+
         self.board = board
+
 
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteKnight.png")
+            self.id = 'N'
         else:
             self.image = pygame.image.load("ChessKingSacrafice/blackKnight.png")
+            self.id = 'n'
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -43,8 +49,10 @@ class Knight(pygame.sprite.Sprite):
         distX = abs(self.x - self.oldX)
         distY = abs(self.y - self.oldY)
         if distY == 180 and distX == 90 or distX == 180 and distY == 90:
+            self.board.remove_piece(self.oldX, self.oldY)
             self.oldX = self.x
             self.oldY = self.y
+            self.board.set_piece(self.x, self.y, self.id)
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX

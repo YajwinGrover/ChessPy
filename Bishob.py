@@ -8,6 +8,7 @@ class Bishob(pygame.sprite.Sprite):
     oldY = 0
     shouldFollow = False
     color = ''
+    id = ''
 
     def __init__(self,newX, newY,ncolor, board):
         super().__init__()
@@ -16,12 +17,15 @@ class Bishob(pygame.sprite.Sprite):
         self.color = ncolor
         self.oldX = newX
         self.oldY = newY
+
         self.board = board
 
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteBishob.png")
+            self.id = 'B'
         else:
             self.image = pygame.image.load("ChessKingSacrafice/blackBishob.png")
+            self.id = 'b'
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -43,8 +47,10 @@ class Bishob(pygame.sprite.Sprite):
         distX = abs(self.x - self.oldX)
         distY = abs(self.y - self.oldY)
         if distY == distX:
+            self.board.remove_piece(self.oldX, self.oldY)
             self.oldX = self.x
             self.oldY = self.y
+            self.board. set_piece(self.x, self.y, self.id)
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX

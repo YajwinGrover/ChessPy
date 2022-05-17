@@ -14,7 +14,7 @@ def DESTROYPIECES(term, pieces):
     if not term:
         return
     x = term[1]
-    y = term[0]
+    y = term[2]
 
     for p in pieces:
         if p.x == x and p.y == y and p.id == term[0]:

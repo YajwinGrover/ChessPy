@@ -63,6 +63,7 @@ class Queen(pygame.sprite.Sprite):
             self.x = self.oldX
             self.y = self.oldY
 
+
     def setFollow(self, follow):
         self.shouldFollow = follow
 

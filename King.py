@@ -59,6 +59,7 @@ class King(pygame.sprite.Sprite):
         #         self.oldX = self.x
         #         self.oldY = self.y
         #         self.board.set_piece(self.x, self.y, 'K')
+
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX

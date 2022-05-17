@@ -9,6 +9,7 @@ from Knight import Knight
 from Bishob import Bishob
 from Board import Board
 
+
 # Yes I am sane.
 def DESTROYPIECES(term, pieces):
     if not term:

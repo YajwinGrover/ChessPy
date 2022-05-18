@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-from Board import Board
 
 class Queen(pygame.sprite.Sprite):
     x = 0
@@ -9,10 +8,11 @@ class Queen(pygame.sprite.Sprite):
     oldY = 0
     shouldFollow = False
     color = ''
-    board = None
-    id = 1
+    id = ''
+
 
     def __init__(self,newX, newY,ncolor, board):
+
         super().__init__()
         self.x = newX
         self.y = newY
@@ -21,11 +21,13 @@ class Queen(pygame.sprite.Sprite):
         self.oldY = newY
         self.board = board
 
+
         if self.color == 'white':
             self.image = pygame.image.load("ChessKingSacrafice/whiteQueen.png")
+            self.id = 'Q'
         else:
             self.image = pygame.image.load("ChessKingSacrafice/blackQueen.png")
-            id = 7
+            self.id = 'q'
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
@@ -50,18 +52,12 @@ class Queen(pygame.sprite.Sprite):
             self.board.remove_piece(self.oldX, self.oldY)
             self.oldX = self.x
             self.oldY = self.y
-            if self.color == 'black':
-                self.board.set_piece(self.x, self.y, 'q')
-            else:
-                self.board.set_piece(self.x, self.y, 'Q')
+            self.board.set_piece(self.x, self.y, self.id)
         elif distX == distY:
             self.board.remove_piece(self.oldX, self.oldY)
             self.oldX = self.x
             self.oldY = self.y
-            if self.color == 'black':
-                self.board.set_piece(self.x, self.y, 'q')
-            else:
-                self.board.set_piece(self.x, self.y, 'Q')
+            self.board.set_piece(self.x, self.y, self.id)
         else:
             self.rect.topleft = (self.oldX, self.oldY)
             self.x = self.oldX
@@ -72,4 +68,3 @@ class Queen(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
-

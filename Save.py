@@ -20,3 +20,6 @@ class Save:
         self.save.append(str(oldx//boardSize)+str(oldy//boardSize)+str(piece)+str(x//boardSize)+str(y//boardSize))
         print(self.save)
 
+    def move(self, j, oldX ,oldY ,x ,y):
+        distX = x - oldX
+        distY = y - oldY

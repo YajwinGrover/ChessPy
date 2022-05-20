@@ -51,6 +51,19 @@ class Piece (pygame.sprite.Sprite):
             self.x = newX
             self.y = newY
 
-    def move(self, boxSize):
+    def move(self, boxSize, peices):
         self.board.board[self.oldY // boxSize][self.oldX // boxSize] = '-'
+        for i in peices:
+            if i.oldX == self.x and i.oldY == self.y:
+                peices.remove(i)
         self.board.board[self.y // boxSize][self.x // boxSize] = self.id
+
+    def checkMove(self, boxSize, pieces, save):
+        self.snap(boxSize)
+        if str(self.y//boxSize)+str(self.x//boxSize) in self.legal_moves:
+            self.move(boxSize, pieces)
+            save.add_move(self.oldX, self.oldY, self.x, self.y, self.id, boardSize=boxSize)
+            self.oldX = self.x
+            self.oldY = self.y
+            return True
+        return False

@@ -59,16 +59,18 @@ class Board:
         nx += incX
         ny += incY
         if color == "black":
-            while 0 <= nx <= 7 and 0 <= ny <= 7 and self.board[ny][nx] == '-':
-                #print(nx,ny)
+            while 0 <= nx <= 7 and 0 <= ny <= 7 and self.board[ny][nx].islower() is False:
                 legal_moves.append(str(ny)+str(nx))
+                if self.board[ny][nx].isupper() is True:
+                    break
                 nx += incX
                 ny += incY
             return
         elif color == "white":
-            while 0 <= nx <= 7 and 0 <= ny <= 7 and self.board[ny][nx] == '-':
-                #print(nx,ny)
+            while 0 <= nx <= 7 and 0 <= ny <= 7 and self.board[ny][nx].isupper() is False:
                 legal_moves.append(str(ny)+str(nx))
+                if self.board[ny][nx].islower() is True:
+                    break
                 nx += incX
                 ny += incY
             return
@@ -105,25 +107,27 @@ class Board:
         nx = x // self.boxSize
         ny = y // self.boxSize
         if color == "black":
-            if 0 <= ny + 1 <= 7 and self.board[ny + 1][nx].islower() == False:
+            if 0 <= ny + 1 <= 7 and self.board[ny + 1][nx] == "-":
                 legal_moves.append(str(ny + 1) + str(nx))
-            if nx <= 1 and self.board[ny + 1][nx - 1].isupper():
+            if nx >= 1 and self.board[ny + 1][nx - 1].isupper():
                 legal_moves.append(str(ny + 1) + str(nx - 1))
+
             if nx <= 6 and self.board[ny + 1][nx + 1].isupper():
                 legal_moves.append(str(ny + 1) + str(nx + 1))
         else:
-            if 0 <= ny - 1 <= 7 and self.board[ny - 1][nx].isupper() == False:
+            if 0 <= ny - 1 <= 7 and self.board[ny - 1][nx] == "-":
                 legal_moves.append(str(ny - 1) + str(nx))
-            if nx <= 1 and self.board[ny - 1][nx - 1].islower():
+            if nx >= 1 and self.board[ny - 1][nx - 1].islower():
                 legal_moves.append(str(ny - 1) + str(nx - 1))
             if nx <= 6 and self.board[ny - 1][nx + 1].islower():
                 legal_moves.append(str(ny - 1) + str(nx + 1))
+
         if first_move:
             if color == "black":
-                if 0 <= ny + 2 <= 7 and self.board[ny + 2][nx].islower() == False:
+                if 0 <= ny + 2 <= 7 and self.board[ny + 2][nx] == "-":
                     legal_moves.append(str(ny + 2) + str(nx))
             else:
-                if 0 <= ny - 2 <= 7 and self.board[ny - 2][nx].isupper() == False:
+                if 0 <= ny - 2 <= 7 and self.board[ny - 2][nx] == "-":
                     legal_moves.append(str(ny - 2) + str(nx))
 
     def check_king(self, x, y, legal_moves, color):

@@ -18,10 +18,12 @@ class Pawn(Piece):
     def calculate_legal(self):
         self.board.check_pawn(self.x, self.y, self.legal_moves, self.firstMove, self.color)
 
-    def checkMove(self, boxSize):
+    def checkMove(self, boxSize, pieces, save):
         self.snap(boxSize)
         if str(self.y//boxSize)+str(self.x//boxSize) in self.legal_moves:
-            self.move(boxSize)
+            self.move(boxSize, pieces)
+            save.add_move(self.oldX, self.oldY, self.x, self.y, self.id, boardSize=boxSize)
+            self.firstMove = False
             self.oldX = self.x
             self.oldY = self.y
             return True

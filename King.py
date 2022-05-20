@@ -16,11 +16,3 @@ class King(Piece):
     def calculate_legal(self):
         self.board.check_king(self.x, self.y, self.legal_moves, self.color)
 
-    def checkMove(self, boxSize):
-        self.snap(boxSize)
-        if str(self.y // boxSize) + str(self.x // boxSize) in self.legal_moves:
-            self.move(boxSize)
-            self.oldX = self.x
-            self.oldY = self.y
-            return True
-        return False

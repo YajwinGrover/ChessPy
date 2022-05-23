@@ -16,9 +16,12 @@ class Save:
             self.save[i] = self.save[i][:-1]
 
 
+
     def add_move(self, oldx, oldy, x, y, piece, boardSize):
         self.save.append(str(oldx//boardSize)+str(oldy//boardSize)+str(piece)+str(x//boardSize)+str(y//boardSize))
         print(self.save)
+    def add_remove_move(self,x, y):
+        self.save.append("R-" + str())
 
     def move(self, j, oldX ,oldY ,x ,y):
         distX = x - oldX

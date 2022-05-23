@@ -75,11 +75,12 @@ class main():
                 i.clear_moves()
 
         #Save button
-        self.save = pygame.font.Font('freesansbold.ttf', 32).render("Save", True, (0, 255, 0), (0, 0, 0))
+        self.save = pygame.font.Font('freesansbold.ttf', 32).render("Save", True, 'Black')
         self.save_button = self.save.get_rect(topleft=(1000, 0))
 
-        self.read = pygame.font.Font('freesansbold.ttf', 32).render("Read", True, (0, 255, 0), (0, 0, 0))
-        self.read_button = self.save.get_rect(topleft=(1000, 50))
+        self.read = pygame.font.Font('freesansbold.ttf', 32).render("Read", True, 'Black')
+        self.read_button = self.read.get_rect(topleft=(1000, 50))
+
 
     def run(self):
         while True:
@@ -172,6 +173,7 @@ class main():
         self.pieces.append(Rook(7 * self.boxSize,0 * self.boxSize,'black', self.board, self.boxSize))
 
         save_count = 0
+        pygame.display.update()
         while save_count < len(self.my_save.save):
             for row in range(0, 8):
                 for col in range(0, 8):
@@ -194,6 +196,10 @@ class main():
             for j in self.pieces:
                 if j.x == int(i[0])*self.boxSize and j.y == int(i[1])*self.boxSize:
                     self.my_save.move(j, j.x, j.y, int(i[-2])*self.boxSize, int(i[-1])*self.boxSize)
+                    for peice in range(len(self.pieces)):
+                        if self.pieces[peice].y == int(i[-1])*self.boxSize and self.pieces[peice].x == int(i[-2])*self.boxSize:
+                            self.pieces.pop(peice)
+                            break
                     j.y = int(i[-1])*self.boxSize
                     j.x = int(i[-2])*self.boxSize
                     j.rect.topleft = (j.x, j.y)
